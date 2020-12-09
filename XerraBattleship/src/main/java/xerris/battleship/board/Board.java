@@ -65,7 +65,7 @@ public class Board {
 	public Cell bombRandomCell() throws Exception{
 		if (openCells.size() == 0)
             throw new Exception("No open cells to bomb");
-        int openCellNum = Math.abs(rand.nextInt()) % (openCells.size()-1);   
+        int openCellNum = Math.abs(rand.nextInt()) % (openCells.size());   
         Cell c = openCells.remove(openCellNum);
         c.hit();
         if(c.isShip())

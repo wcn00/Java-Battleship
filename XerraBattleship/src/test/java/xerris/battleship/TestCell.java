@@ -12,13 +12,105 @@ import static org.junit.Assert.*;
 public class TestCell {
 
     @Test
-    public void testBoardMethod() {
+    public void testCell() {
         Cell cell = new Cell(3,4);
         assertNotNull(cell);
         assertEquals((long)3,(long)cell.getRow());
-        
-        
+        assertEquals((long)4,(long)cell.getColl());
+        assertFalse(cell.isHit());
+        cell.hit();
+        assertTrue(cell.isHit());
+        assertFalse(cell.isShip());
+        cell.setShip();
+        assertTrue(cell.isShip());
+    }
+    
+    @Test
+    public void testShip() {
+    	Board bd = new Board(true);
+    	Ship ship = bd.allocShip(true, 3, 4);
+    	assertTrue(ship.isHorizontal());
+    	assertFalse(ship.isSunk());
+    	ship.getBow().hit();
+    	ship.getMidships().hit();
+    	ship.getStern().hit();
+    	assertTrue(ship.isSunk());
+    	
+    	bd = new Board(true);
+    	ship = bd.allocShip(false, 5,2);
+    	assertTrue(ship.isHorizontal());
+    	assertFalse(ship.isSunk());
+    	ship.getBow().hit();
+    	ship.getMidships().hit();
+    	ship.getStern().hit();
+    	assertTrue(ship.isSunk());
     }
 
+    @Test
+    public void testBoard() {
+    	Board bd = new Board(true);
+    	for(int i=0;i<64;i++) {
+    		try {
+    			assertNotNull(bd.bombRandomCell());
+    		} catch (Exception e) {
+    			assertNull(e);
+    		}
+    	}
+    	try {
+    		bd.bombRandomCell();
+    	} catch (Exception e) {
+    		assertNotNull(e);
+    	}
+    	
+    	bd = new Board(true);
+    	Ship s  = bd.allocRandomShip(false);
+    	assertTrue(s.getBow().isShip());
+    	assertTrue(s.getMidships().isShip());
+    	assertTrue(s.getStern().isShip());
+    	
+    	bd = new Board(true);
+    	s  = bd.allocRandomShip(true);
+    	assertTrue(s.getBow().isShip());
+    	assertTrue(s.getMidships().isShip());
+    	assertTrue(s.getStern().isShip());
+    	
+    	bd = new Board(true);
+    	Cell c = new Cell(4,4);
+    	assertNotNull(bd.getCellAvail(c, "north"));
+    	assertNotNull(bd.getCellAvail(c, "South"));
+    	assertNotNull(bd.getCellAvail(c, "EAST"));
+    	assertNotNull(bd.getCellAvail(c, "wesT"));
+
+    	bd = new Board(true);
+    	s  = bd.allocRandomShip(true);
+    	try {
+    		assertTrue(bd.bombCell(s.getMidships()));
+    	} catch (Exception e) {
+    		assertNull(e);//never get here
+    	}
+    }
 	
+    
+    @Test
+    public void testPlayer() {
+    	Player p = new Player("Kane",true);
+    	assertNotNull(p);
+    	assertNotNull(p.getName());
+    	assertNotNull(p.getBoard());
+    	for(int j=0; j<5;j++) {
+	    	p = new Player("Kane",  j% 2 ==1);
+	    	int i =0;
+	    	try {
+	    		for( i=0;i<64;i++) {
+	    			boolean won = p.go(p.getBoard());
+	    			if(won)
+	    				break;
+	    		}
+	    		assertTrue(i<64);
+	    	} catch (Exception e) {
+	    		assertNotNull(e);  //shouldn't happen
+	    	}
+	    }   	
+    	
+    }
 }

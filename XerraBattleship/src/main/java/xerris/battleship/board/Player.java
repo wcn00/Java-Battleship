@@ -32,6 +32,11 @@ public class Player {
 		return board;
 	}
 
+	
+	/*
+	 * Code coverage of junit tests here is hit and miss because the location of the ship is random as is the bombing
+	 * 
+	 */
 	public boolean go(Board opponentBoard) throws Exception {
 		Cell bombedCell = null;
 		if (hitState == 0) {
