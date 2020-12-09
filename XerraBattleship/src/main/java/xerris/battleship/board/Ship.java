@@ -9,6 +9,9 @@ public class Ship {
 		this.midships = midships;
 		this.stern = stern;
 		this.horizontal = horizontal;
+		bow.setShip(this);
+		midships.setShip(this);
+		stern.setShip(this);
 	}
 
 	public boolean isHorizontal() {

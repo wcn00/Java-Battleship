@@ -9,7 +9,11 @@ import xerris.battleship.board.*;
 
 import static org.junit.Assert.*;
 
-public class TestCell {
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.Scanner;
+
+public class TestGame {
 
     @Test
     public void testCell() {
@@ -21,8 +25,13 @@ public class TestCell {
         cell.hit();
         assertTrue(cell.isHit());
         assertFalse(cell.isShip());
-        cell.setShip();
-        assertTrue(cell.isShip());
+    	Board bd = new Board(true);
+    	Ship ship = bd.allocShip(true, 3, 4);
+        assertTrue(ship.getBow().isShip());
+        assertEquals((long)3,(long)Cell.getColNameIndex('D')) ;
+        assertEquals((long)3,(long)Cell.getRowNameIndex('4')) ;
+        cell = new Cell(0,0);
+        assertEquals("1a",cell.print());
     }
     
     @Test
@@ -38,7 +47,7 @@ public class TestCell {
     	
     	bd = new Board(true);
     	ship = bd.allocShip(false, 5,2);
-    	assertTrue(ship.isHorizontal());
+    	assertFalse(ship.isHorizontal());
     	assertFalse(ship.isSunk());
     	ship.getBow().hit();
     	ship.getMidships().hit();
@@ -81,28 +90,43 @@ public class TestCell {
     	assertNotNull(bd.getCellAvail(c, "EAST"));
     	assertNotNull(bd.getCellAvail(c, "wesT"));
 
-    	bd = new Board(true);
+    	bd = new Board(false);
     	s  = bd.allocRandomShip(true);
-    	try {
+      	try {
     		assertTrue(bd.bombCell(s.getMidships()));
     	} catch (Exception e) {
     		assertNull(e);//never get here
     	}
+      	try {
+      		bd.playShoot();
+      	}catch(Exception e) {
+      		assertNull(e);
+      	}
+      	try {
+      		bd.playHit();
+      	}catch(Exception e) {
+      		assertNull(e);
+      	}
+      	try {
+      		bd.print();
+      	}catch(Exception e) {
+      		assertNull(e);
+      	}
     }
 	
     
     @Test
     public void testPlayer() {
-    	Player p = new Player("Kane",true);
+    	Player p = new Player("Kane",true,true);
     	assertNotNull(p);
     	assertNotNull(p.getName());
     	assertNotNull(p.getBoard());
     	for(int j=0; j<5;j++) {
-	    	p = new Player("Kane",  j% 2 ==1);
+	    	p = new Player("Kane",  j% 2 ==1,true);
 	    	int i =0;
 	    	try {
 	    		for( i=0;i<64;i++) {
-	    			boolean won = p.go(p.getBoard());
+	    			boolean won = p.go(p.getBoard(),true);
 	    			if(won)
 	    				break;
 	    		}
@@ -111,6 +135,11 @@ public class TestCell {
 	    		assertNotNull(e);  //shouldn't happen
 	    	}
 	    }   	
-    	
+      	assertNotNull(p.getCellToBombFromPlayer(p.getBoard(),"blarg","5a"));
+      	try {
+      		p.placeShip(p.getBoard().getCellByCorrids(5, 3));
+      	} catch (Exception e) {
+      		assertNull(e);
+      	}
     }
 }
