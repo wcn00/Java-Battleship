@@ -24,9 +24,14 @@ public class Game {
 			playera = new Player(resp, quiet, autoPlay);
 			Cell shipCell = null;
 			while (shipCell == null) {
-				shipCell = playera.getCellToBombFromPlayer(playera.getBoard(),"Please enter the cell for the middle of your ship",null);
+				shipCell = playera.getCellToBombFromPlayer(playera.getBoard(),"Please enter the cell for the middle of your ship",null);				
 			}
-			playera.placeShip(shipCell);
+			boolean horizontal = true;
+			System.out.println("Enter 'h' for horizontal ship orientaton, any other char for virticle:");
+			String orientation = System.console().readLine();
+			horizontal = orientation.length() >0 && orientation.toLowerCase().startsWith("h");
+					
+			playera.placeShip(horizontal,shipCell);
 		} else {
 			playera = new Player("Kane", quiet, autoPlay);
 		}

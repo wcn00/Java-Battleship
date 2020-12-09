@@ -29,8 +29,8 @@ public class Player {
 		return playerName;
 	}
 
-	public void placeShip(Cell shipcell) {
-		board.allocShip(horizontal, shipcell.getRow(), shipcell.getColl());
+	public void placeShip(boolean orientation,Cell shipcell) {
+		board.allocShip(orientation, shipcell.getRow(), shipcell.getColl());
 	}
 	public Board getBoard() {
 		return board;
@@ -58,7 +58,7 @@ public class Player {
 					bombed = true;
 					}
 				}				
-			return board.shipForCellIsSunk(bombedCell);
+			return opponentBoard.shipForCellIsSunk(bombedCell);
 		}
 	}
 

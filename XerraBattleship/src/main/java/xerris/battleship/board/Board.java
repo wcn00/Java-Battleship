@@ -31,7 +31,12 @@ public class Board {
 			}
 			board.add(row);
 		}
-		rand = new Random(java.time.Instant.now().getEpochSecond());
+		try {
+			Thread.sleep(100);
+		} catch (Exception e) {
+			//don't care
+		}
+		rand = new Random(java.time.Instant.now().toEpochMilli());
 	}
 
 	private void playSound(String fname) {
@@ -149,9 +154,6 @@ public class Board {
 			midCell = board.get(rowNo + 1).get(colNo);
 			sternCell = board.get(rowNo - 1).get(colNo);
 		}
-		//wcn_debug
-		System.out.println(midCell.print());
-		//wcn_debug
 		return (ship = new Ship(horizontal, bowCell, midCell, sternCell));
 	}
 

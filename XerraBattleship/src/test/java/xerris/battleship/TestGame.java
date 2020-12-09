@@ -137,7 +137,8 @@ public class TestGame {
 	    }   	
       	assertNotNull(p.getCellToBombFromPlayer(p.getBoard(),"blarg","5a"));
       	try {
-      		p.placeShip(p.getBoard().getCellByCorrids(5, 3));
+      		p.placeShip(true,p.getBoard().getCellByCorrids(5, 3));
+      		p.placeShip(false,p.getBoard().getCellByCorrids(1, 5));
       	} catch (Exception e) {
       		assertNull(e);
       	}
